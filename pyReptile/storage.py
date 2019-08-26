@@ -63,4 +63,20 @@ class DataStorage(object):
         elif self.databaseType == 'NoSQL':
             self.DBSession.update_many(condition,{'$set':value})
 
+    def getfile(self,content,filepath):
+        with open(filepath,'wb') as file:
+            file.write(content)
+    def write_csv(self,value,title=[]):
+        if not title:
+            title=sorted(value[0].keys())
+        pathExists=os.path.exists(self.path)
+        with open(self.path,'a',newline='') as csv_file:
+            csv_writer=csv.writer(csv_file)
+            if not pathExists:
+                csv_writer.writerow(title)
+            for v in value:
+                value_list=[]
+                for t in title:
+                    value_list.append(v[t])
+                csv_writer.writerow(value_list)
 
